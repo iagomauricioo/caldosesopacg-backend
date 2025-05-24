@@ -41,4 +41,13 @@ class AvailableProductOutputItemSerializer(serializers.ModelSerializer):
         fields = ['product_id', 'quantity_in_grams']
 
 class AvailableProductOutputSerializer(serializers.Serializer):
-    products = AvailableProductOutputItemSerializer(many=True) 
+    products = AvailableProductOutputItemSerializer(many=True)
+
+class ConsumeStockItemSerializer(serializers.Serializer):
+    product_id = serializers.IntegerField()
+    quantity_in_grams = serializers.IntegerField(min_value=1)
+
+class ConsumeStockInputSerializer(serializers.Serializer):
+    products = serializers.ListField(
+        child=ConsumeStockItemSerializer()
+    ) 
