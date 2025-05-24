@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product
+from .models import Product, AvailableProduct
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,4 +22,23 @@ class ProductSerializer(serializers.ModelSerializer):
             if not isinstance(price['price_in_cents'], int):
                 raise serializers.ValidationError("price_in_cents must be an integer")
                 
-        return value 
+        return value
+
+class ProductAvailabilityItemSerializer(serializers.Serializer):
+    product_id = serializers.IntegerField()
+    quantity_in_grams = serializers.IntegerField(min_value=0)
+
+class AvailableProductInputSerializer(serializers.Serializer):
+    products = serializers.ListField(
+        child=ProductAvailabilityItemSerializer()
+    )
+
+class AvailableProductOutputItemSerializer(serializers.ModelSerializer):
+    product_id = serializers.IntegerField(source='product.id')
+    
+    class Meta:
+        model = AvailableProduct
+        fields = ['product_id', 'quantity_in_grams']
+
+class AvailableProductOutputSerializer(serializers.Serializer):
+    products = AvailableProductOutputItemSerializer(many=True) 

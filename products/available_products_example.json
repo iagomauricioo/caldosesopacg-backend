@@ -1,0 +1,24 @@
+{
+  "products": [
+    {
+      "product_id": 1,
+      "quantity_in_grams": 15000
+    },
+    {
+      "product_id": 2,
+      "quantity_in_grams": 12000
+    },
+    {
+      "product_id": 3,
+      "quantity_in_grams": 10000
+    },
+    {
+      "product_id": 4,
+      "quantity_in_grams": 8000
+    },
+    {
+      "product_id": 6,
+      "quantity_in_grams": 7000
+    }
+  ]
+} 
