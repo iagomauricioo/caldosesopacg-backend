@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Client
+from .models import Client, Address
 from .serializers import ClientSerializer, ClientDetailSerializer, AddressSerializer
 
 
@@ -24,14 +24,13 @@ class ClientDetailView(generics.RetrieveAPIView):
 
 
 # Create address for a client
-class AddressCreateView(APIView):
-    def post(self, request, client_id):
+class AddressCreateView(generics.CreateAPIView):
+    serializer_class = AddressSerializer
+
+    def perform_create(self, serializer):
+        client_id = self.kwargs.get('client_id')
         client = generics.get_object_or_404(Client, pk=client_id)
-        serializer = AddressSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(client=client)
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+        serializer.save(client=client)
 
 
 # List addresses of a client
