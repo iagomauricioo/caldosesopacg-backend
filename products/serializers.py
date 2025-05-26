@@ -26,7 +26,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class ProductAvailabilityItemSerializer(serializers.Serializer):
     product_id = serializers.IntegerField()
-    quantity_in_grams = serializers.IntegerField(min_value=0)
+    quantity_in_ml = serializers.IntegerField(min_value=0)
 
 class AvailableProductInputSerializer(serializers.Serializer):
     products = serializers.ListField(
@@ -38,14 +38,14 @@ class AvailableProductOutputItemSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = AvailableProduct
-        fields = ['product_id', 'quantity_in_grams']
+        fields = ['product_id', 'quantity_in_ml']
 
 class AvailableProductOutputSerializer(serializers.Serializer):
     products = AvailableProductOutputItemSerializer(many=True)
 
 class ConsumeStockItemSerializer(serializers.Serializer):
     product_id = serializers.IntegerField()
-    quantity_in_grams = serializers.IntegerField(min_value=1)
+    quantity_in_ml = serializers.IntegerField(min_value=1)
 
 class ConsumeStockInputSerializer(serializers.Serializer):
     products = serializers.ListField(

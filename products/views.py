@@ -74,7 +74,7 @@ class AvailableProductsView(APIView):
         # Buscar produtos disponíveis
         available_products = AvailableProduct.objects.filter(
             date=today,
-            quantity_in_grams__gt=0
+            quantity_in_ml__gt=0
         ).select_related('product')
         
         # Serializar resposta
@@ -146,7 +146,7 @@ class AvailableProductsView(APIView):
             available_product, _ = AvailableProduct.objects.update_or_create(
                 product=product_obj,
                 date=today,
-                defaults={'quantity_in_grams': product['quantity_in_grams']}
+                defaults={'quantity_in_ml': product['quantity_in_ml']}
             )
             available_products.append(available_product)
         
@@ -222,19 +222,19 @@ class ConsumeStockView(APIView):
                 )
                 
                 # Verificar se há estoque suficiente
-                if available_product.quantity_in_grams < product_data['quantity_in_grams']:
+                if available_product.quantity_in_ml < product_data['quantity_in_ml']:
                     raise serializers.ValidationError({
                         "error": {
                             "type": "validation_error",
                             "message": "Insufficient stock",
                             "details": f"Product {product_data['product_id']} has insufficient stock. "
-                                     f"Available: {available_product.quantity_in_grams}g, "
-                                     f"Requested: {product_data['quantity_in_grams']}g"
+                                     f"Available: {available_product.quantity_in_ml}ml, "
+                                     f"Requested: {product_data['quantity_in_ml']}ml"
                         }
                     })
                 
                 # Atualizar o estoque
-                available_product.quantity_in_grams -= product_data['quantity_in_grams']
+                available_product.quantity_in_ml -= product_data['quantity_in_ml']
                 available_product.save()
                 updated_products.append(available_product)
                 
